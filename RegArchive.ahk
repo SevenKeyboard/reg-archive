@@ -26,7 +26,7 @@ class RegArchive
             return false
         if (inStr(fileAttr, 'D'))
             return false
-        command := '"' A_WinDir '\System32\reg.exe" import'
+        command := '"' . this._getRegExePath() . '" import'
         command .= ' "' . filePath . '"'
         if (regView == 32 || regView == 64)
             command .= ' /reg:' . format('{:d}', regView)
@@ -50,7 +50,7 @@ class RegArchive
                 return false
             }
         }
-        command := '"' A_WinDir '\System32\reg.exe" export'
+        command := '"' . this._getRegExePath() . '" export'
         command .= ' "' . keyPath  . '"'
         command .= ' "' . filePath .  '"'
         if (overwrite)
@@ -62,5 +62,11 @@ class RegArchive
             return false
         }
         return (exitCode == 0)
+    }
+    static _getRegExePath()    {
+        winDir := A_WinDir
+        if (A_Is64bitOS && A_PtrSize == 4 && fileExist(winDir . "\Sysnative\reg.exe"))
+            return winDir . "\Sysnative\reg.exe"
+        return winDir . "\System32\reg.exe"
     }
 }
