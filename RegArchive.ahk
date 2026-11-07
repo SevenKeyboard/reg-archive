@@ -11,7 +11,7 @@ class VersionManager_RegArchive
     static _ := this._init()
     static _init()    {
         global
-        REGARCHIVE_VERSION := "1.0.0"
+        REGARCHIVE_VERSION := "1.0.1"
     }
 }
 class RegArchive
@@ -40,6 +40,8 @@ class RegArchive
         if (keyPath == '' || filePath == '')
             return false
         if (inStr(keyPath, '"') || inStr(filePath, '"'))
+            return false
+        if (!overwrite && fileExist(filePath))
             return false
         splitPath(filePath,, &dir)
         if (dir == '')
